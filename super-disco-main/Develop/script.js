@@ -2,32 +2,30 @@
 var todaysDate = moment().format('dddd, MMMM do YYYY');
 $("#currentDay").html(todaysDate);
 
-$(document).ready(function () {
-    // save button click listener 
-    $(".saveBtn").on("click", function () {
-        // Get user's.reminder values 
-        var text = $(this).siblings(".reminder").val();
-        var time = $(this).parent().attr("id");
-
-        // Save text in local storage
-        localStorage.setItem(time, text);
+// Saves user data to localStorage for refresh
+$(document).ready(function(){
+    $(".saveBtn").on("click", function() {
+        localStorage.setItem($(this).prop("id"), $(this).prev().val());
+        console.log(localStorage.getItem($(this).prop("id")));
     })
+});
+
    
     function timeTracker() {
-        //get current number of hours.
-        var timeNow = moment().hour();
+        // Get hours
+        var currentHour = moment().hour();
 
         // loop over time blocks
         $(".time-block").each(function () {
-            var blockTime = parseInt($(this).attr("id").split("hour")[1]);
+            var currentTime = parseInt($(this).attr("id").split("hour")[1]);
 
             // To check the time and add the classes for background indicators
-            if (blockTime < timeNow) {
+            if (currentTime < currentHour) {
                 $(this).removeClass("future");
                 $(this).removeClass("present");
                 $(this).addClass("past");
             }
-            else if (blockTime === timeNow) {
+            else if (currentTime === currentHour) {
                 $(this).removeClass("past");
                 $(this).removeClass("future");
                 $(this).addClass("present");
@@ -54,4 +52,3 @@ $(document).ready(function () {
     $("#hour10 .reminder").val(localStorage.getItem("hour10"));
 
     timeTracker();
-})
